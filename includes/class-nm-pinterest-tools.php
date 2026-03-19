@@ -1,10 +1,22 @@
 <?php
+/**
+ * Core plugin class.
+ *
+ * @package NM_Pinterest_Tools
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 if ( ! class_exists( 'NM_Pinterest_Tools' ) ) {
+
+	/**
+	 * Main NM Pinterest Tools singleton.
+	 *
+	 * Handles settings retrieval, meta key definitions, ACF field group
+	 * registration, and date/time utilities.
+	 */
 	class NM_Pinterest_Tools {
 
 		/**
@@ -242,9 +254,9 @@ if ( ! class_exists( 'NM_Pinterest_Tools' ) ) {
 
 			acf_add_local_field_group(
 				array(
-					'key'    => 'group_nm_pinterest_tools',
-					'title'  => 'Pinterest',
-					'fields' => array(
+					'key'      => 'group_nm_pinterest_tools',
+					'title'    => 'Pinterest',
+					'fields'   => array(
 						array(
 							'key'           => 'field_nm_pinterest_image',
 							'label'         => 'Pinterest Image',

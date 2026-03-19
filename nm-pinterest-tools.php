@@ -7,6 +7,8 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Text Domain: nm-pinterest-tools
+ *
+ * @package NM_Pinterest_Tools
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
