@@ -1,10 +1,20 @@
 <?php
+/**
+ * Settings page class.
+ *
+ * @package NM_Pinterest_Tools
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 if ( ! class_exists( 'NM_Pinterest_Tools_Settings' ) ) {
+
+	/**
+	 * Registers and renders the Settings → NM Pinterest Tools page
+	 * using the WordPress Settings API.
+	 */
 	class NM_Pinterest_Tools_Settings {
 
 		/**

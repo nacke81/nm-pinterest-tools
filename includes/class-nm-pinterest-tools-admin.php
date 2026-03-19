@@ -1,10 +1,20 @@
 <?php
+/**
+ * Admin UI class.
+ *
+ * @package NM_Pinterest_Tools
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
+
+	/**
+	 * Handles the post-editor UI (Generate Pin / Share to Pinterest buttons),
+	 * admin list column with filtering and sorting.
+	 */
 	class NM_Pinterest_Tools_Admin {
 
 		/**
@@ -246,11 +256,13 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 		private function get_current_post() {
 			$post_id = 0;
 
+			// phpcs:disable WordPress.Security.NonceVerification -- Read-only; nonce verified by WP core on this admin screen.
 			if ( isset( $_GET['post'] ) ) {
 				$post_id = absint( $_GET['post'] );
 			} elseif ( isset( $_POST['post_ID'] ) ) {
 				$post_id = absint( $_POST['post_ID'] );
 			}
+			// phpcs:enable WordPress.Security.NonceVerification
 
 			if ( $post_id > 0 ) {
 				$post = get_post( $post_id );
@@ -306,11 +318,13 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 		 * @return void
 		 */
 		public function admin_notices() {
-			if ( empty( $_GET['nm_pinterest_reset'] ) || '1' !== (string) $_GET['nm_pinterest_reset'] ) {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Displaying a notice after redirect; nonce was verified in reset_share_status().
+			if ( empty( $_GET['nm_pinterest_reset'] ) || '1' !== sanitize_text_field( wp_unslash( $_GET['nm_pinterest_reset'] ) ) ) {
 				return;
 			}
 
 			$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 			if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
 				return;
@@ -540,7 +554,8 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 				return;
 			}
 
-			$current = isset( $_GET['nm_pinterest_shared_filter'] ) ? sanitize_key( $_GET['nm_pinterest_shared_filter'] ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Filter dropdown reads from the URL; no state change.
+			$current = isset( $_GET['nm_pinterest_shared_filter'] ) ? sanitize_key( wp_unslash( $_GET['nm_pinterest_shared_filter'] ) ) : '';
 			?>
 			<select name="nm_pinterest_shared_filter">
 				<option value="">All pins</option>
@@ -566,7 +581,8 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 				return;
 			}
 
-			$filter = isset( $_GET['nm_pinterest_shared_filter'] ) ? sanitize_key( $_GET['nm_pinterest_shared_filter'] ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- List table filter; read-only URL parameter.
+			$filter = isset( $_GET['nm_pinterest_shared_filter'] ) ? sanitize_key( wp_unslash( $_GET['nm_pinterest_shared_filter'] ) ) : '';
 			if ( 'shared' === $filter ) {
 				$query->set(
 					'meta_query',
@@ -625,10 +641,12 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 			$order = 'ASC' === strtoupper( (string) $query->get( 'order' ) ) ? 'ASC' : 'DESC';
 
 			if ( false === strpos( $clauses['join'], $alias ) ) {
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $alias is a hardcoded string; $wpdb->postmeta and $wpdb->posts are safe table names.
 				$clauses['join'] .= $wpdb->prepare(
 					" LEFT JOIN {$wpdb->postmeta} AS {$alias} ON ({$wpdb->posts}.ID = {$alias}.post_id AND {$alias}.meta_key = %s) ",
 					$meta
 				);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
 
 			$clauses['orderby'] = "CASE WHEN {$alias}.meta_value IS NULL OR {$alias}.meta_value = '' THEN 1 ELSE 0 END ASC, CAST({$alias}.meta_value AS UNSIGNED) {$order}, {$wpdb->posts}.post_date DESC";
