@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="NM Pinterest Tools">
+	<description>WordPress Coding Standards for NM Pinterest Tools</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/nm-pinterest-tools-v1/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg value="sp"/>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
+	<config name="minimum_wp_version" value="6.0"/>
+	<config name="text_domain" value="nm-pinterest-tools"/>
+</ruleset>
