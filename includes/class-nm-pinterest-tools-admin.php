@@ -95,11 +95,11 @@ if ( ! class_exists( 'NM_Pinterest_Tools_Admin' ) ) {
 			$has_image  = $image_id > 0;
 			$can_render = $generate_id > 0;
 
-			$allowed_statuses = array( 'auto-draft', 'draft', 'pending' );
+			$allowed_statuses = array( 'auto-draft', 'draft', 'pending', 'publish' );
 			$reasons          = array();
 
 			if ( ! in_array( $post->post_status, $allowed_statuses, true ) ) {
-				$reasons[] = 'Post status must be Draft or Pending (or a new post).';
+				$reasons[] = 'Post status must be Draft, Pending, or Published (or a new post).';
 			}
 
 			if ( $has_image ) {
