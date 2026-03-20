@@ -1,0 +1,7 @@
+# Force LF line endings for all PHP files (WPCS requires Unix-style endings)
+*.php text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.dist text eol=lf
